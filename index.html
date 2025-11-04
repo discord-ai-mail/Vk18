@@ -43,7 +43,7 @@
     background:radial-gradient(circle at 30% 25%,#ff6b6b,#c82a2a 60%);
     box-shadow:0 12px 30px rgba(200,40,40,0.25),inset -6px -10px 20px rgba(0,0,0,0.12);
     display:grid;place-items:center;color:#fff;font-weight:800;transform-origin:center;
-    z-index:9;cursor:pointer;animation:floatBall 2.4s ease-in-out infinite;
+    z-index:9;animation:floatBall 2.4s ease-in-out infinite;
   }
   .ball:after{content:'';position:absolute;width:76%;height:8px;border-radius:8px;
     background:linear-gradient(90deg,rgba(255,255,255,0.9),rgba(255,255,255,0.12));transform:translateY(-6px);}
@@ -53,7 +53,8 @@
     box-shadow:0 12px 30px rgba(60,40,20,0.08);display:flex;align-items:center;justify-content:flex-end;padding-right:16px;
     font-weight:700;color:#4b2f15;}
   .glass-wrap{width:520px;height:360px;max-width:80vw;max-height:68vh;border-radius:16px;
-    position:relative;overflow:visible;display:grid;place-items:center;transform-style:preserve-3d;}
+    position:relative;overflow:visible;display:grid;place-items:center;transform-style:preserve-3d;
+    transition:all 1200ms cubic-bezier(.25,.9,.25,1);}
   .glass{width:100%;height:100%;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.35),rgba(255,255,255,0.22));
     border:1px solid rgba(255,255,255,0.9);box-shadow:0 12px 40px rgba(10,30,80,0.06);
     position:relative;overflow:hidden;display:block;}
@@ -113,7 +114,7 @@
         </div>
         <div class="ball" id="cricketBall">🏏</div>
         <div class="bat">CRICKET • LEGEND</div>
-        <div class="boom" id="boomText">BOOM!</div>
+        <div class="boom" id="boomText">👑</div>
       </div>
 
       <div class="headline">
@@ -123,8 +124,8 @@
 
       <div class="endcard" id="endCard">
         <div style="display:flex;flex-direction:column">
-          <div class="ded-head">Dedicated to all fans of Virat Kohli</div>
-          <div class="ded-sub">Collaborative partner digital creator & artist — Keerthypavi Wishes</div>
+          <div class="ded-head">Keerthypavi Wishes and VK Fans</div>
+          <div class="ded-sub">Collaborative partner digital creator & artist</div>
         </div>
         <div style="margin-left:auto;font-size:13px;color:var(--muted)">🎉</div>
       </div>
@@ -137,6 +138,7 @@ const ball=document.getElementById("cricketBall"),glassWrap=document.getElementB
 glassPane=document.getElementById("glassPane"),reveal=document.getElementById("revealImage"),
 boom=document.getElementById("boomText"),endCard=document.getElementById("endCard");
 reveal.style.backgroundImage=`url('${IMAGE_URL}')`;
+
 function rint(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function createShards(c=36){const s=[];const w=glassPane.clientWidth,h=glassPane.clientHeight;
 for(let i=0;i<c;i++){const d=document.createElement("div");d.className="shard";
@@ -149,31 +151,63 @@ for(let i=0;i<c;i++){const p=document.createElement("div");p.className="confetti
 p.style.left=rint(5,95)+"%";p.style.top=rint(0,90)+"%";p.style.transform=`rotate(${rint(0,360)}deg)`;glassWrap.appendChild(p);pieces.push(p)}return pieces}
 function createSparkles(c=14){const l=[];for(let i=0;i<c;i++){const s=document.createElement("div");s.className="sparkle";
 s.style.left=rint(12,88)+"%";s.style.top=rint(8,78)+"%";glassWrap.appendChild(s);l.push(s)}return l}
-let shards,confetti,sparkles;function initParticles(){shards=createShards(44);confetti=createConfetti(60);sparkles=createSparkles(18);
+let shards,confetti,sparkles;
+function initParticles(){shards=createShards(44);confetti=createConfetti(60);sparkles=createSparkles(18);
 shards.forEach(s=>s.style.opacity=0);confetti.forEach(c=>c.style.opacity=0);sparkles.forEach(s=>s.style.opacity=0)}
-function smashEffect(){ball.style.transition="transform 450ms cubic-bezier(.2,.9,.2,1), left 450ms, top 450ms";
-const wrapRect=glassWrap.getBoundingClientRect(),ballRect=ball.getBoundingClientRect();
-const centerX=wrapRect.left+wrapRect.width/2-ballRect.width/2,centerY=wrapRect.top+wrapRect.height/2-ballRect.height/2;
-const parentRect=ball.offsetParent.getBoundingClientRect();const leftPct=centerX-parentRect.left+"px",topPct=centerY-parentRect.top+"px";
-ball.style.left=leftPct;ball.style.top=topPct;ball.style.transform="scale(.88)";
-setTimeout(()=>{ball.style.transition="transform 220ms ease, opacity 220ms ease";
-ball.style.transform="scale(.5) translateY(6px)";ball.style.opacity="0";boom.classList.add("pop");
-shards.forEach((s,idx)=>{s.style.opacity=1;const ang=(idx/shards.length)*Math.PI*2+(Math.random()*0.6-0.3),
-dist=160+Math.random()*320,rx=Math.cos(ang)*dist,ry=Math.sin(ang)*dist,rot=rint(-160,420);
-s.animate([{transform:s.style.transform+" translate3d(0,0,0) rotate(0deg)",opacity:1},
-{transform:`translate3d(${rx}px,${ry}px,${rint(-200,200)}px) rotate(${rot}deg) scale(${(0.6+Math.random()*1.6).toFixed(2)})`,opacity:0}],
-{duration:900+Math.random()*400,easing:"cubic-bezier(.25,.9,.22,1)",fill:"forwards"})});
-setTimeout(()=>{reveal.style.opacity=1;reveal.style.transform="scale(1)";
-confetti.forEach((c,i)=>{const dx=(Math.random()*2-1)*220,dy=-120-Math.random()*260,rot=rint(-420,420);
-c.style.opacity=1;c.animate([{transform:`translate3d(0,0,0) rotate(${rot}deg)`,opacity:1},
-{transform:`translate3d(${dx}px,${dy}px,${rint(-120,120)}px) rotate(${rot+360}deg)`,opacity:1},
-{transform:`translate3d(${dx*1.8}px,${dy+600}px,120px) rotate(${rot+720}deg)`,opacity:0}],
-{duration:1800+Math.random()*1400,easing:"cubic-bezier(.2,.8,.2,1)",delay:i*8})});
-sparkles.forEach((s,i)=>{const scale=0.6+Math.random()*1.8;s.style.opacity=1;
-s.animate([{transform:"translateY(6px) scale(.6)",opacity:0},
-{transform:`translateY(0px) scale(${scale})`,opacity:1},
-{transform:"translateY(-10px) scale(.8)",opacity:0}],{duration:900+Math.random()*800,delay:i*46})});
-setTimeout(()=>{endCard.classList.add("show")},640)},240)},480)}
+
+function smashEffect(){
+  ball.style.transition="transform 450ms cubic-bezier(.2,.9,.2,1), left 450ms, top 450ms";
+  const wrapRect=glassWrap.getBoundingClientRect(),ballRect=ball.getBoundingClientRect();
+  const centerX=wrapRect.left+wrapRect.width/2-ballRect.width/2,centerY=wrapRect.top+wrapRect.height/2-ballRect.height/2;
+  const parentRect=ball.offsetParent.getBoundingClientRect();
+  const leftPct=centerX-parentRect.left+"px",topPct=centerY-parentRect.top+"px";
+  ball.style.left=leftPct;ball.style.top=topPct;ball.style.transform="scale(.88)";
+
+  // After impact
+  setTimeout(()=>{
+    ball.style.transition="transform 220ms ease, opacity 220ms ease";
+    ball.style.transform="scale(.5) translateY(6px)";
+    ball.style.opacity="0";boom.classList.add("pop");
+
+    // Expand container to 832x1248
+    glassWrap.style.width="832px";
+    glassWrap.style.height="1248px";
+
+    shards.forEach((s,idx)=>{
+      s.style.opacity=1;
+      const ang=(idx/shards.length)*Math.PI*2+(Math.random()*0.6-0.3),
+      dist=160+Math.random()*320,rx=Math.cos(ang)*dist,ry=Math.sin(ang)*dist,rot=rint(-160,420);
+      s.animate([
+        {transform:s.style.transform+" translate3d(0,0,0) rotate(0deg)",opacity:1},
+        {transform:`translate3d(${rx}px,${ry}px,${rint(-200,200)}px) rotate(${rot}deg) scale(${(0.6+Math.random()*1.6).toFixed(2)})`,opacity:0}],
+        {duration:900+Math.random()*400,easing:"cubic-bezier(.25,.9,.22,1)",fill:"forwards"});
+    });
+
+    setTimeout(()=>{
+      reveal.style.opacity=1;
+      reveal.style.transform="scale(1)";
+      confetti.forEach((c,i)=>{
+        const dx=(Math.random()*2-1)*220,dy=-120-Math.random()*260,rot=rint(-420,420);
+        c.style.opacity=1;
+        c.animate([
+          {transform:`translate3d(0,0,0) rotate(${rot}deg)`,opacity:1},
+          {transform:`translate3d(${dx}px,${dy}px,${rint(-120,120)}px) rotate(${rot+360}deg)`,opacity:1},
+          {transform:`translate3d(${dx*1.8}px,${dy+600}px,120px) rotate(${rot+720}deg)`,opacity:0}],
+          {duration:1800+Math.random()*1400,easing:"cubic-bezier(.2,.8,.2,1)",delay:i*8});
+      });
+      sparkles.forEach((s,i)=>{
+        const scale=0.6+Math.random()*1.8;
+        s.style.opacity=1;
+        s.animate([{transform:"translateY(6px) scale(.6)",opacity:0},
+                   {transform:`translateY(0px) scale(${scale})`,opacity:1},
+                   {transform:"translateY(-10px) scale(.8)",opacity:0}],
+                   {duration:900+Math.random()*800,delay:i*46});
+      });
+      setTimeout(()=>{endCard.classList.add("show")},640);
+    },240);
+  },480);
+}
+
 initParticles();
 // Auto smash after 1.5s
 window.addEventListener("load",()=>{setTimeout(()=>{smashEffect()},1500)});
