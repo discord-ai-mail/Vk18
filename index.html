@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -70,14 +70,24 @@
   .headline{text-align:center;}
   .headline h2{font-size:28px;margin:0;color:#111;font-weight:900;letter-spacing:0.6px}
   .headline p{margin:6px 0 0 0;color:var(--muted);font-size:13px}
-  .endcard{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+  .endcard{
+    position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
     background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.88));
     border-radius:14px;padding:14px 20px;display:flex;gap:12px;align-items:center;
     box-shadow:0 8px 30px rgba(20,20,50,0.06);border:1px solid rgba(0,0,0,0.04);
-    opacity:0;transform-origin:center;transition:all 700ms cubic-bezier(.2,.9,.25,1);}
-  .endcard.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
-  .ded-head{font-weight:700;color:#222}
-  .ded-sub{font-size:12px;color:var(--muted)}
+    opacity:0;transform-origin:center;transition:all 700ms cubic-bezier(.2,.9,.25,1);
+  }
+  .ded-popup{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);
+    background:rgba(255,255,255,0.75);backdrop-filter:blur(10px);
+    border-radius:20px;padding:24px 32px;text-align:center;
+    box-shadow:0 12px 30px rgba(10,10,40,0.08);
+    opacity:0;transition:all 800ms cubic-bezier(.25,.8,.25,1);
+    border:1px solid rgba(255,255,255,0.9);z-index:10;
+  }
+  .ded-popup.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
+  .ded-head{font-weight:700;color:#222;font-size:20px;margin-bottom:4px;}
+  .ded-sub{font-size:13px;color:var(--muted)}
   .badge{padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,#6be5ff,#7b5bff);
     color:#fff;font-weight:700;font-size:12px;box-shadow:0 8px 18px rgba(123,91,255,0.12)}
   @media (max-width:720px){.card{padding:18px}.glass-wrap{width:92%;height:240px}.ball{width:72px;height:72px}.bat{display:none}}
@@ -95,14 +105,14 @@
     <div class="card">
       <header>
         <div class="logo">
-          <div class="crest">K</div>
+          <div class="crest">VK18</div>
           <div>
-            <h1>King Kohli — CelebModeOn</h1>
-            <div class="sub">A cinematic birthday surprise — glass shatter reveal</div>
+            <h1>King Kohli</h1>
+            <div class="sub">A cinematic birthday surprise</div>
           </div>
         </div>
         <div style="display:flex;gap:10px;align-items:center">
-          <div class="badge">Birthday</div>
+          
         </div>
       </header>
 
@@ -110,6 +120,10 @@
         <div class="glass-wrap" id="glassWrap">
           <div class="glass" id="glassPane">
             <div class="image" id="revealImage"></div>
+            <div class="ded-popup" id="dedPopup">
+              <div class="ded-head">Keerthypavi Wishes and VK Fans</div>
+              <div class="ded-sub">Collaborative partner digital creator & artist</div>
+            </div>
           </div>
         </div>
         <div class="ball" id="cricketBall">🏏</div>
@@ -121,22 +135,17 @@
         <h2>Happy Birthday, King Kohli 👑</h2>
         <p>From the pitch to our hearts — epic, fearless, forever.</p>
       </div>
-
-      <div class="endcard" id="endCard">
-        <div style="display:flex;flex-direction:column">
-          <div class="ded-head">Keerthypavi Wishes and VK Fans</div>
-          <div class="ded-sub">Collaborative partner digital creator & artist</div>
-        </div>
-        <div style="margin-left:auto;font-size:13px;color:var(--muted)">🎉</div>
-      </div>
     </div>
   </div>
 
 <script>
 const IMAGE_URL="./vk18.jpg";
-const ball=document.getElementById("cricketBall"),glassWrap=document.getElementById("glassWrap"),
-glassPane=document.getElementById("glassPane"),reveal=document.getElementById("revealImage"),
-boom=document.getElementById("boomText"),endCard=document.getElementById("endCard");
+const ball=document.getElementById("cricketBall"),
+glassWrap=document.getElementById("glassWrap"),
+glassPane=document.getElementById("glassPane"),
+reveal=document.getElementById("revealImage"),
+boom=document.getElementById("boomText"),
+dedPopup=document.getElementById("dedPopup");
 reveal.style.backgroundImage=`url('${IMAGE_URL}')`;
 
 function rint(a,b){return Math.floor(Math.random()*(b-a+1))+a}
@@ -163,13 +172,11 @@ function smashEffect(){
   const leftPct=centerX-parentRect.left+"px",topPct=centerY-parentRect.top+"px";
   ball.style.left=leftPct;ball.style.top=topPct;ball.style.transform="scale(.88)";
 
-  // After impact
   setTimeout(()=>{
     ball.style.transition="transform 220ms ease, opacity 220ms ease";
     ball.style.transform="scale(.5) translateY(6px)";
     ball.style.opacity="0";boom.classList.add("pop");
 
-    // Expand container to 832x1248
     glassWrap.style.width="832px";
     glassWrap.style.height="1248px";
 
@@ -186,6 +193,7 @@ function smashEffect(){
     setTimeout(()=>{
       reveal.style.opacity=1;
       reveal.style.transform="scale(1)";
+      dedPopup.classList.add("show");
       confetti.forEach((c,i)=>{
         const dx=(Math.random()*2-1)*220,dy=-120-Math.random()*260,rot=rint(-420,420);
         c.style.opacity=1;
@@ -203,14 +211,31 @@ function smashEffect(){
                    {transform:"translateY(-10px) scale(.8)",opacity:0}],
                    {duration:900+Math.random()*800,delay:i*46});
       });
-      setTimeout(()=>{endCard.classList.add("show")},640);
-    },240);
-  },480);
+      setTimeout(()=>{dedPopup.style.opacity="0";},5000);
+   
+    // Fade out popup, then remove it
+    setTimeout(()=>{
+      if(dedPopup && dedPopup.parentNode){
+        dedPopup.parentNode.removeChild(dedPopup);
+      }
+    },5600);
+
+    // Show final bottom dedication card after popup fades
+    setTimeout(()=>{
+      endCard.classList.add("show");
+    },6000);
+
+  },240);
+ },480);
 }
 
 initParticles();
+
 // Auto smash after 1.5s
-window.addEventListener("load",()=>{setTimeout(()=>{smashEffect()},1500)});
+window.addEventListener("load",()=>{
+  setTimeout(()=>{smashEffect()},1500);
+});
 </script>
 </body>
 </html>
+
